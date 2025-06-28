@@ -8,7 +8,7 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE_NAME: clans-api
   REGION: europe-west1
-  SQL_INSTANCE: us-central1-c:vertigo-master
+  SQL_INSTANCE: us-central1:vertigo-master
 
 jobs:
   deploy:
