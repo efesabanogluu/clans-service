@@ -50,6 +50,7 @@ def create_clan():
     if not data or not data.get('name'):
         return jsonify({"error": "Clan name is required"}), 400
     
+    # Assign UUID for clan_id.
     clan_id = str(uuid.uuid4())
     try:
         db = get_db()
