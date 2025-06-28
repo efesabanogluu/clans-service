@@ -1,0 +1,59 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [ "master" ]  # Sadece main branch'ine pushlandığında tetikle
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  SERVICE_NAME: clans-api
+  REGION: europe-west1  # İstanbul için 'europe-west9' kullanabilirsiniz
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: 'read'
+      id-token: 'write'  # GCP Auth için gerekli
+
+    steps:
+    # 1. Repoyu klonla
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    # 2. GCP Authentication
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+        workload_identity_provider: 'projects/YOUR_PROJECT_NUMBER/locations/global/workloadIdentityPools/YOUR_POOL/providers/YOUR_PROVIDER'
+        service_account: 'github-actions@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
+
+    # 3. Gcloud CLI kurulumu
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    # 4. Docker imajını build et ve pushla
+    - name: Build and Push Docker Image
+      run: |-
+        gcloud auth configure-docker
+        docker build -t "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" .
+        docker push "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
+
+    # 5. Cloud Run'a deploy et
+    - name: Deploy to Cloud Run
+      run: |-
+        gcloud run deploy "$SERVICE_NAME" \
+          --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
+          --platform managed \
+          --region "$REGION" \
+          --allow-unauthenticated \
+          --cpu 1 \
+          --memory 512Mi \
+          --max-instances 3 \
+          --set-cloudsql-instances "$PROJECT_ID:$REGION:your-cloudsql-instance" \
+          --update-env-vars "DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }}" \
+          --project "$PROJECT_ID"
