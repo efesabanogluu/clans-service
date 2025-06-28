@@ -1,5 +1,5 @@
 DB_CONFIG = {
-    'unix_socket': '/cloudsql/omega-booster-464215-u4:us-central1-c:vertigo-master',
+    'unix_socket': '/cloudsql/omega-booster-464215-u4:us-central1:vertigo-master',
     'user': 'root',       # üretimde ayrı kullanıcı
     'password': 'Endeavor1998?',       # üretimde güçlü şifre
     'database': 'vertigo_db',
