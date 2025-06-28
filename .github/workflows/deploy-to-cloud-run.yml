@@ -54,5 +54,5 @@ jobs:
           --memory 512Mi \
           --max-instances 3 \
           --set-cloudsql-instances "$PROJECT_ID:$SQL_INSTANCE" \
-          --update-env-vars "DB_SOCKET=${{ secrets.DB_SOCKET }},DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_NAME=${{ secrets.DB_NAME }}"
+          --update-env-vars "DB_SOCKET=${{ secrets.DB_SOCKET }},DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_NAME=${{ secrets.DB_NAME }}" \
           --project "$PROJECT_ID"
