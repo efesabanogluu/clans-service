@@ -2,12 +2,12 @@ name: Deploy to Cloud Run
 
 on:
   push:
-    branches: [ "master" ]  # Sadece main branch'ine pushlandığında tetikle
+    branches: [ "master" ]
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE_NAME: clans-api
-  REGION: europe-west1  # İstanbul için 'europe-west9' kullanabilirsiniz
+  REGION: europe-west1
   SQL_INSTANCE: us-central1-c:vertigo-master
 
 jobs:
@@ -16,10 +16,10 @@ jobs:
     
     permissions:
       contents: 'read'
-      id-token: 'write'  # GCP Auth için gerekli
+      id-token: 'write' # For gcp auth
 
     steps:
-    # 1. Repoyu klonla
+    # 1. Cloning repo
     - name: Checkout Repository
       uses: actions/checkout@v4
 
@@ -28,23 +28,21 @@ jobs:
       uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
-        #workload_identity_provider: 'projects/YOUR_PROJECT_NUMBER/locations/global/workloadIdentityPools/YOUR_POOL/providers/YOUR_PROVIDER'
-        #service_account: 'github-actions@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
 
-    # 3. Gcloud CLI kurulumu
+    # 3. Gcloud CLI Installation
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-  # 4. Docker imajını build et ve Artifact Registry'e pushla
+  # 4. Docker imajını build et ve Artifact Registry'e pushla Building Docker Image and upload to Artifact Registry
     - name: Build and Push Docker Image
       run: |-
         gcloud auth configure-docker europe-west1-docker.pkg.dev  # REPO BÖLGESİNİ DEĞİŞTİREBİLİRSİNİZ
         docker build -t "europe-west1-docker.pkg.dev/$PROJECT_ID/clans-service/$SERVICE_NAME:$GITHUB_SHA" .
         docker push "europe-west1-docker.pkg.dev/$PROJECT_ID/clans-service/$SERVICE_NAME:$GITHUB_SHA"
 
-    # 5. Cloud Run'a deploy et (Artifact Registry'e göre güncellendi)
+    # 5. Deploying on Cloud Run
     - name: Deploy to Cloud Run
       run: |-
         gcloud run deploy "$SERVICE_NAME" \

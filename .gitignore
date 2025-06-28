@@ -1,4 +1,4 @@
-# GCP Service Account Key (ASLA COMMİT ETMEYİN!)
+# GCP Service Accounts
 *.json
 *.key
 *.pem
@@ -24,7 +24,7 @@ venv/
 Dockerfile.dev
 docker-compose.debug.yml
 
-# Logs ve veritabanı
+# Logs and dbs
 *.log
 *.sqlite3
 *.db
@@ -32,7 +32,7 @@ docker-compose.debug.yml
 # macOS
 .DS_Store
 
-# Test ve coverage
+# Test and coverage
 .coverage
 htmlcov/
 .pytest_cache/

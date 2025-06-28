@@ -43,7 +43,7 @@ def home():
         }
     })
 
-# 1. Clan Oluşturma
+# 1. Creates a new clan and returns the UUID.
 @app.route('/clans', methods=['POST'])
 def create_clan():
     data = request.get_json()
@@ -75,7 +75,7 @@ def create_clan():
         if 'cursor' in locals():
             cursor.close()
 
-# 2. Tüm Clanları Listeleme
+# 2. Lists all clans. Optionally filter by region or sort by created_at.
 @app.route('/clans', methods=['GET'])
 def get_clans():
     region = request.args.get('region')
@@ -111,7 +111,7 @@ def get_clans():
         if 'cursor' in locals():
             cursor.close()
 
-# 3. Tek Clan Getirme
+# 3. Return a clan with a specific id
 @app.route('/clans/<uuid:id>', methods=['GET'])
 def get_clan(id):
     try:
@@ -137,7 +137,7 @@ def get_clan(id):
         if 'cursor' in locals():
             cursor.close()
 
-# 4. Clan Silme
+# 4. Deletes the clan with the given ID.
 @app.route('/clans/<uuid:id>', methods=['DELETE'])
 def delete_clan(id):
     try:
@@ -166,3 +166,14 @@ def delete_clan(id):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
+
+# curl -X POST https://clans-api-901696881514.europe-west1.run.app/clans \
+#   -H "Content-Type: application/json" \
+#   -d '{"name":"Phoenix","region":"US"}' \
+#   --compressed
+
+#curl "https://clans-api-901696881514.europe-west1.run.app/clans?region=TR&sort=name"
+
+#curl https://clans-api-901696881514.europe-west1.run.app/clans/8cff89b6-b986-4a01-a9d6-4d66cff39f8f
+
+#curl -X DELETE https://clans-api-901696881514.europe-west1.run.app/clans/8cff89b6-b986-4a01-a9d6-4d66cff39f8f
