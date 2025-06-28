@@ -8,6 +8,7 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE_NAME: clans-api
   REGION: europe-west1  # İstanbul için 'europe-west9' kullanabilirsiniz
+  SQL_INSTANCE: vertigo-master
 
 jobs:
   deploy:
@@ -54,6 +55,6 @@ jobs:
           --cpu 1 \
           --memory 512Mi \
           --max-instances 3 \
-          --set-cloudsql-instances "$PROJECT_ID:$REGION:your-cloudsql-instance" \
+          --set-cloudsql-instances "$PROJECT_ID:$REGION:$SQL_INSTANCE" \
           --update-env-vars "DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }}" \
           --project "$PROJECT_ID"
