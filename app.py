@@ -34,13 +34,52 @@ def close_db(e):
 @app.route('/')
 def home():
     return jsonify({
-        "service": "Clans API",
+        "service": "Vertigo Games Clan API",
+        "version": "1.0.0",
         "endpoints": {
-            "create_clan": "POST /clans",
-            "list_clans": "GET /clans",
-            "get_clan": "GET /clans/<uuid:id>",
-            "delete_clan": "DELETE /clans/<uuid:id>"
-        }
+            "create_clan": {
+                "method": "POST",
+                "path": "/clans",
+                "description": "Create a new clan",
+                "parameters": {
+                    "body": {
+                        "name": {"type": "string", "required": True, "example": "Shadow Warriors"},
+                        "region": {"type": "string", "required": False, "example": "TR"}
+                    }
+                }
+            },
+            "list_clans": {
+                "method": "GET",
+                "path": "/clans",
+                "description": "List all clans with optional filtering and sorting",
+                "parameters": {
+                    "query": {
+                        "region": {"type": "string", "required": False, "description": "Filter by region code", "example": "US"},
+                        "sort": {"type": "string", "required": False, "description": "Sort by 'name' or 'created_at'", "example": "name"}
+                    }
+                }
+            },
+            "get_clan": {
+                "method": "GET",
+                "path": "/clans/<uuid:id>",
+                "description": "Get clan details by ID",
+                "parameters": {
+                    "path": {
+                        "id": {"type": "UUID", "required": True, "description": "Clan UUID", "example": "8cff89b6-b986-4a01-a9d6-4d66cff39f8f"}
+                    }
+                }
+            },
+            "delete_clan": {
+                "method": "DELETE",
+                "path": "/clans/<uuid:id>",
+                "description": "Delete a clan by ID",
+                "parameters": {
+                    "path": {
+                        "id": {"type": "UUID", "required": True, "description": "Clan UUID", "example": "8cff89b6-b986-4a01-a9d6-4d66cff39f8f"}
+                    }
+                }
+            }
+        },
     })
 
 # 1. Creates a new clan and returns the UUID.
