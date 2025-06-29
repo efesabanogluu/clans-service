@@ -142,3 +142,32 @@ clans-api/
 │       └── deploy-to-cloud-run.yml    # GitHub Actions workflow
 └── README.md                          # This file
 ```
+
+
+## SQL Schema
+
+The `clans` table is created using the following SQL script:
+
+```sql
+CREATE TABLE clans (
+  id CHAR(36) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  region VARCHAR(2) DEFAULT NULL,
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+### Key Features:
+1. **UUID Primary Key**  
+   - `id CHAR(36)` stores UUIDs in standard 36-character format (e.g. `123e4567-e89b-12d3-a456-426614174000`)
+
+2. **Constraints**  
+   - `name` is required (`NOT NULL`) with max 100 characters  
+   - `region` is optional (2-letter country code like `TR`, `US`)  
+   - `created_at` automatically sets to UTC timestamp on insert  
+
+3. **Optimized for Cloud SQL (MySQL)**  
+   - Uses `InnoDB` storage engine  
+   - `utf8mb4` encoding supports all Unicode characters  
+   - Case-insensitive collation (`utf8mb4_0900_ai_ci`)  
