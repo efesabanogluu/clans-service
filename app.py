@@ -71,7 +71,7 @@ def home():
             },
             "delete_clan": {
                 "method": "DELETE",
-                "path": "/clans/{id}"
+                "path": "/clans/{id}",
                 "description": "Delete a clan by ID",
                 "parameters": {
                     "path": {
