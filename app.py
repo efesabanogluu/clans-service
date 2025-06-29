@@ -34,7 +34,7 @@ def close_db(e):
 @app.route('/')
 def home():
     return jsonify({
-        "service": "Vertigo Games Clan API",
+        "service": "Clan API",
         "version": "1.0.0",
         "endpoints": {
             "create_clan": {
@@ -61,7 +61,7 @@ def home():
             },
             "get_clan": {
                 "method": "GET",
-                "path": "/clans/<uuid:id>",
+                "path": "/clans/{id}",
                 "description": "Get clan details by ID",
                 "parameters": {
                     "path": {
@@ -71,7 +71,7 @@ def home():
             },
             "delete_clan": {
                 "method": "DELETE",
-                "path": "/clans/<uuid:id>",
+                "path": "/clans/{id}"
                 "description": "Delete a clan by ID",
                 "parameters": {
                     "path": {
@@ -206,14 +206,3 @@ def delete_clan(id):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
-
-# curl -X POST https://clans-api-901696881514.europe-west1.run.app/clans \
-#   -H "Content-Type: application/json" \
-#   -d '{"name":"Phoenix","region":"US"}' \
-#   --compressed
-
-#curl "https://clans-api-901696881514.europe-west1.run.app/clans?region=TR&sort=name"
-
-#curl https://clans-api-901696881514.europe-west1.run.app/clans/8cff89b6-b986-4a01-a9d6-4d66cff39f8f
-
-#curl -X DELETE https://clans-api-901696881514.europe-west1.run.app/clans/8cff89b6-b986-4a01-a9d6-4d66cff39f8f
