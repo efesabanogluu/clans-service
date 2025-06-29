@@ -170,4 +170,63 @@ CREATE TABLE clans (
 3. **Optimized for Cloud SQL (MySQL)**  
    - Uses `InnoDB` storage engine  
    - `utf8mb4` encoding supports all Unicode characters  
-   - Case-insensitive collation (`utf8mb4_0900_ai_ci`)  
+   - Case-insensitive collation (`utf8mb4_0900_ai_ci`)
+
+  
+## Testing the API
+
+A live API is deployed on Google Cloud Run. Use the following `curl` examples for testing:
+
+### 1. POST /clans (Create a Clan)
+```bash
+curl -X POST https://clans-api-901696881514.europe-west1.run.app/clans \
+   -H "Content-Type: application/json" \
+   -d '{"name":"Phoenix","region":"US"}' \
+   --compressed
+```
+
+**Example Response:**
+```json
+{
+  "id": "8cff89b6-b986-4a01-a9d6-4d66cff39f8f",
+  "message": "Clan created successfully."
+}
+```
+
+### 2. GET /clans (List Clans with Filtering & Sorting)
+```bash
+curl "https://clans-api-901696881514.europe-west1.run.app/clans?region=TR&sort=name"
+```
+
+**Query Parameters:**
+- `region`: Filter by region code (e.g., `TR`, `US`)
+- `sort`: Sort by `name` or `created_at` (default: `created_at`)
+
+### 3. GET/ clans/{id}} (Get Clan by ID)
+```bash
+curl https://clans-api-901696881514.europe-west1.run.app/clans/8cff89b6-b986-4a01-a9d6-4d66cff39f8f
+```
+
+**Example Response:**
+```json
+{
+  "id": "8cff89b6-b986-4a01-a9d6-4d66cff39f8f",
+  "name": "Shadow Warriors",
+  "region": "TR",
+  "created_at": "2023-11-15T08:30:45Z"
+}
+```
+
+### 4. DELETE /clans/{id} (Delete a Clan)
+```bash
+curl -X DELETE https://clans-api-901696881514.europe-west1.run.app/clans/8cff89b6-b986-4a01-a9d6-4d66cff39f8f
+```
+
+**Response:**
+```json
+{
+  "message": "Clan deleted successfully"
+}
+```
+
+> **Note:** Replace `8cff89b6-b986-4a01-a9d6-4d66cff39f8f` with actual clan IDs from your requests.
